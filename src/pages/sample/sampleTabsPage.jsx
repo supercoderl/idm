@@ -38,8 +38,10 @@ import {
     faFile,
     faChartSimple,
     faShieldHalved,
+    faMedal,
 } from '@fortawesome/free-solid-svg-icons';
 import { library } from '@fortawesome/fontawesome-svg-core';
+import Role from '../mainPage/role';
 
 library.add(faUser);
 library.add(faCalendar);
@@ -48,44 +50,7 @@ library.add(faWindowRestore);
 library.add(faFile);
 library.add(faChartSimple);
 library.add(faShieldHalved);
-
-const menuOptions = [
-    {
-        id: 1,
-        Icon: ManageAccountIcon,
-        text: 'Quản lý tài khoản',
-    },
-    {
-        id: 2,
-        Icon: Person2OutlinedIcon,
-        text: 'Họp, trực khoa',
-    },
-    {
-        id: 3,
-        Icon: AppRegistrationIcon,
-        text: 'Phân công',
-    },
-    {
-        id: 4,
-        Icon: LibraryBooksIcon,
-        text: 'Đề xuất',
-    },
-    {
-        id: 5,
-        Icon: FolderCopyIcon,
-        text: 'Hồ sơ lưu trữ',
-    },
-    {
-        id: 6,
-        Icon: GroupsIcon,
-        text: 'Phòng ban',
-    },
-    {
-        id: 7,
-        Icon: ShowChartIcon,
-        text: 'Báo cáo thống kê',
-    },
-];
+library.add(faMedal);
 
 function SampleTabsPage() {
     const [activeIndex, setActiveIndex] = useState(1);
@@ -163,6 +128,7 @@ function SampleTabsPage() {
                     {activeIndex === 4 && <File title="Quản lý hồ sơ lưu trữ" />}
                     {activeIndex === 5 && <Department title="Quản lý phòng ban" />}
                     {activeIndex === 6 && <Statistic title="Báo cáo thống kê" />}
+                    {activeIndex === 7 && <Role title="Phân quyền" />}
                 </Grid>
             </Grid>
         </>

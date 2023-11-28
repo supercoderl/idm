@@ -30,16 +30,18 @@ axiosInstance.interceptors.response.use(
     },
     async (error) => {
         const originalRequest = error.config;
-        const refreshToken = localStorage.getItem('refreshToken');
+        const refresh = localStorage.getItem('refreshToken');
 
         if (error.response) {
             switch (error.response.status) {
                 case 401:
-                    if (refreshToken) {
+                    if (refresh) {
                         try {
-                            const response = await axios.post('Auth/refresh-token', {
-                                refreshToken,
-                            });
+                            const body = {
+                                refreshToken: refresh,
+                            };
+
+                            const response = await axiosInstance.post('Auth/refresh-token', body);
 
                             localStorage.setItem('token', response.data.data.token.accessToken);
                             localStorage.setItem('refreshToken', response.data.data.refreshToken.refreshToken);

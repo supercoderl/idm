@@ -11,7 +11,7 @@ import {
     FormControl,
     InputLabel,
 } from '@mui/material';
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid, nlNL, ptBR, viVN } from '@mui/x-data-grid';
 import LockIcon from '@mui/icons-material/Lock';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
@@ -295,6 +295,7 @@ export default function Account({ title }) {
                             pageSizeOptions={[5, 10]}
                             checkboxSelection
                             onRowSelectionModelChange={handleSelectionItem}
+                            localeText={viVN.components.MuiDataGrid.defaultProps.localeText}
                         />
                     </div>
                 </CardContent>

@@ -19,7 +19,7 @@ import { LoadingButton } from '@mui/lab';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid, viVN } from '@mui/x-data-grid';
 import moment from 'moment';
 import { enqueueSnackbar } from 'notistack';
 import { useEffect, useState } from 'react';
@@ -181,6 +181,7 @@ export default function Department({ title }) {
                             }}
                             pageSizeOptions={[5, 10]}
                             checkboxSelection
+                            localeText={viVN.components.MuiDataGrid.defaultProps.localeText}
                         />
                     </div>
                 </CardContent>

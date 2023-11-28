@@ -16,17 +16,28 @@ import { Provider as SnackbarProvider } from '@/components/snackbar';
 import MUITheme from '@/utils/theme';
 import Router from '@/utils/routes';
 import CustomizationLayout from '@/components/layouts/customization';
+import { useMemo, useState } from 'react';
+import { ThemeProvider, createTheme, useTheme } from '@mui/material';
+import * as locales from '@mui/material/locale';
 
 function App() {
+    const [locale, setLocale] = useState('viVN');
+
+    const theme = useTheme();
+
+    const themeWithLocale = useMemo(() => createTheme(theme, locales[locale]), [locale, theme]);
+
     return (
-        <StoreProvider>
-            <MUITheme>
-                <SnackbarProvider>
-                    <CustomizationLayout />
-                    <Router />
-                </SnackbarProvider>
-            </MUITheme>
-        </StoreProvider>
+        <ThemeProvider theme={themeWithLocale}>
+            <StoreProvider>
+                <MUITheme>
+                    <SnackbarProvider>
+                        <CustomizationLayout />
+                        <Router />
+                    </SnackbarProvider>
+                </MUITheme>
+            </StoreProvider>
+        </ThemeProvider>
     );
 }
 
