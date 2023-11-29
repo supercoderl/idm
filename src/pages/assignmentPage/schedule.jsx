@@ -96,7 +96,7 @@ export default function AssignmentSchedule() {
                 setAssignments(transformAssignment(value.data.data, taskList));
             })
             .catch((reason) => {
-                console.log(reason.response.data.message);
+                if (reason.response.status !== 401) console.log(reason.response.data.message);
             });
     };
 
@@ -111,7 +111,7 @@ export default function AssignmentSchedule() {
                     }, 600);
                 })
                 .catch((reason) => {
-                    console.log(reason.response.data.message);
+                    if (reason.response.status !== 401) console.log(reason.response.data.message);
                 });
         } else {
             // add the new event to the list
@@ -124,7 +124,7 @@ export default function AssignmentSchedule() {
                     }, 600);
                 })
                 .catch((reason) => {
-                    console.log(reason.response.data.message);
+                    if (reason.response.status !== 401) console.log(reason.response.data.message);
                 });
         }
         // close the popup
@@ -141,7 +141,7 @@ export default function AssignmentSchedule() {
                 }, 600);
             })
             .catch((reason) => {
-                console.log(reason.response.data.message);
+                if (reason.response.status !== 401) console.log(reason.response.data.message);
             });
     };
 

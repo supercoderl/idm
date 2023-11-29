@@ -64,8 +64,10 @@ export default function Assignment({ title }) {
                 }, 600);
             })
             .catch((reason) => {
-                alert(reason.response.data.message, 'error');
-                console.log(reason);
+                if (reason.response.status !== 401) {
+                    alert(reason.response.data.message, 'error');
+                    console.log(reason);
+                }
             });
     };
 
@@ -79,8 +81,10 @@ export default function Assignment({ title }) {
                 }, 600);
             })
             .catch((reason) => {
-                alert(reason.response.data.message, 'error');
-                console.log(reason);
+                if (reason.response.status !== 401) {
+                    alert(reason.response.data.message, 'error');
+                    console.log(reason);
+                }
             });
     };
 
@@ -94,8 +98,10 @@ export default function Assignment({ title }) {
                 }, 600);
             })
             .catch((reason) => {
-                alert(reason.response.data.message, 'error');
-                console.log(reason);
+                if (reason.response.status !== 401) {
+                    alert(reason.response.data.message, 'error');
+                    console.log(reason);
+                }
             });
     };
 
@@ -109,8 +115,10 @@ export default function Assignment({ title }) {
                 }, 600);
             })
             .catch((reason) => {
-                alert(reason.response.data.message, 'error');
-                console.log(reason);
+                if (reason.response.status !== 401) {
+                    alert(reason.response.data.message, 'error');
+                    console.log(reason);
+                }
             });
     };
 
@@ -146,9 +154,11 @@ export default function Assignment({ title }) {
                 }, 600);
             })
             .catch((reason) => {
-                setLoading(false);
-                alert(reason.response.data.message, 'error');
-                console.log(reason);
+                if (reason.response.status !== 401) {
+                    setLoading(false);
+                    alert(reason.response.data.message, 'error');
+                    console.log(reason);
+                }
             });
     };
 
@@ -164,8 +174,10 @@ export default function Assignment({ title }) {
                 });
             })
             .catch((reason) => {
-                console.log(reason.response.data.message);
-                setLoading(false);
+                if (reason.response.status !== 401) {
+                    console.log(reason.response.data.message);
+                    setLoading(false);
+                }
             });
         cancleDelete();
     };
@@ -193,7 +205,7 @@ export default function Assignment({ title }) {
                     getProgresses();
                 })
                 .catch((reason) => {
-                    console.log(reason.response.data.message);
+                    if (reason.response.status !== 401) console.log(reason.response.data.message);
                 });
         }
     };

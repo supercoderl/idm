@@ -59,8 +59,10 @@ export default function CreateUserPage() {
                 }, 600);
             })
             .catch((reason) => {
-                console.log(reason.response.data.message);
-                setLoading(false);
+                if (reason.response.status !== 401) {
+                    console.log(reason.response.data.message);
+                    setLoading(false);
+                }
             });
     };
 

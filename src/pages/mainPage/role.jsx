@@ -9,6 +9,7 @@ import {
     TableCell,
     TableBody,
     Checkbox,
+    Table,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import axiosInstance from '@/config/axiosConfig';
@@ -37,8 +38,10 @@ export default function Role({ title }) {
                 }, 600);
             })
             .catch((reason) => {
-                alert(reason.response.data.message, 'error');
-                console.log(reason);
+                if (reason.response.status !== 401) {
+                    alert(reason.response.data.message, 'error');
+                    console.log(reason);
+                }
             });
     };
 
@@ -52,8 +55,10 @@ export default function Role({ title }) {
                 }, 600);
             })
             .catch((reason) => {
-                alert(reason.response.data.message, 'error');
-                console.log(reason);
+                if (reason.response.status !== 401) {
+                    alert(reason.response.data.message, 'error');
+                    console.log(reason);
+                }
             });
     };
 
@@ -67,8 +72,10 @@ export default function Role({ title }) {
                 }, 600);
             })
             .catch((reason) => {
-                alert(reason.response.data.message, 'error');
-                console.log(reason);
+                if (reason.response.status !== 401) {
+                    alert(reason.response.data.message, 'error');
+                    console.log(reason);
+                }
             });
     };
 
@@ -116,9 +123,11 @@ export default function Role({ title }) {
                     }, 600);
                 })
                 .catch((reason) => {
-                    alert(reason.response.data.message, 'error');
-                    setLoading(false);
-                    console.log(reason);
+                    if (reason.response.status !== 401) {
+                        alert(reason.response.data.message, 'error');
+                        setLoading(false);
+                        console.log(reason);
+                    }
                 });
         } else {
             const body = {
@@ -137,9 +146,11 @@ export default function Role({ title }) {
                     }, 600);
                 })
                 .catch((reason) => {
-                    alert(reason.response.data.message, 'error');
-                    setLoading(false);
-                    console.log(reason);
+                    if (reason.response.status !== 401) {
+                        alert(reason.response.data.message, 'error');
+                        setLoading(false);
+                        console.log(reason);
+                    }
                 });
         }
     };
@@ -161,37 +172,39 @@ export default function Role({ title }) {
 
             <CardContent>
                 <TableContainer>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell width="300">Người dùng</TableCell>
-                            {roles && roles.length > 0
-                                ? roles.map((item, index) => (
-                                      <TableCell key={index} width="200" align="center">
-                                          {item.roleName}
-                                      </TableCell>
+                    <Table>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell width="300">Người dùng</TableCell>
+                                {roles && roles.length > 0
+                                    ? roles.map((item, index) => (
+                                          <TableCell key={index} width="200" align="center">
+                                              {item.roleName}
+                                          </TableCell>
+                                      ))
+                                    : null}
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {users && users.length > 0
+                                ? users.map((user, index) => (
+                                      <TableRow key={index}>
+                                          <TableCell>{user.fullname}</TableCell>
+                                          {roles && roles.length > 0
+                                              ? roles.map((role, index) => (
+                                                    <TableCell key={index} align="center">
+                                                        <Checkbox
+                                                            checked={checkedRole(role.roleID, user.userID)}
+                                                            onChange={() => mapRoleWithUser(role.roleID, user.userID)}
+                                                        />
+                                                    </TableCell>
+                                                ))
+                                              : null}
+                                      </TableRow>
                                   ))
                                 : null}
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {users && users.length > 0
-                            ? users.map((user, index) => (
-                                  <TableRow key={index}>
-                                      <TableCell>{user.fullname}</TableCell>
-                                      {roles && roles.length > 0
-                                          ? roles.map((role, index) => (
-                                                <TableCell key={index} align="center">
-                                                    <Checkbox
-                                                        checked={checkedRole(role.roleID, user.userID)}
-                                                        onChange={() => mapRoleWithUser(role.roleID, user.userID)}
-                                                    />
-                                                </TableCell>
-                                            ))
-                                          : null}
-                                  </TableRow>
-                              ))
-                            : null}
-                    </TableBody>
+                        </TableBody>
+                    </Table>
                 </TableContainer>
             </CardContent>
         </Card>

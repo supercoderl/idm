@@ -86,8 +86,10 @@ export default function Account({ title }) {
                 }, 600);
             })
             .catch((reason) => {
-                alert(reason.response.data.message, 'error');
-                console.log(reason);
+                if (reason.response.status !== 401) {
+                    alert(reason.response.data.message, 'error');
+                    console.log(reason);
+                }
             });
     };
 
@@ -102,8 +104,10 @@ export default function Account({ title }) {
                 }, 600);
             })
             .catch((reason) => {
-                alert(reason.response.data.message, 'error');
-                console.log(reason);
+                if (reason.response.status !== 401) {
+                    alert(reason.response.data.message, 'error');
+                    console.log(reason);
+                }
             });
     };
 
@@ -129,8 +133,10 @@ export default function Account({ title }) {
                 }, 600);
             })
             .catch((reason) => {
-                console.log(reason);
-                setLoading(false);
+                if (reason.response.status !== 401) {
+                    console.log(reason);
+                    setLoading(false);
+                }
             });
     };
 
@@ -146,8 +152,10 @@ export default function Account({ title }) {
                 }, 600);
             })
             .catch((reason) => {
-                console.log(reason);
-                setLoading(false);
+                if (reason.response.status !== 401) {
+                    console.log(reason);
+                    setLoading(false);
+                }
             });
     };
 
@@ -163,8 +171,10 @@ export default function Account({ title }) {
                 });
             })
             .catch((reason) => {
-                console.log(reason.response.data.message);
-                setLoading(false);
+                if (reason.response.status !== 401) {
+                    console.log(reason.response.data.message);
+                    setLoading(false);
+                }
             });
         cancleDelete();
     };
@@ -173,7 +183,6 @@ export default function Account({ title }) {
         const selectedIds = new Set(items);
         const selectedRows = users.filter((value) => selectedIds.has(value.userID));
         setUserToExport(selectedRows);
-        console.log(selectedRows);
     };
 
     const exportToExcel = () => {

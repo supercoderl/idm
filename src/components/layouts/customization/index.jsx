@@ -71,7 +71,7 @@ function CustomizationLayout() {
                         borderBottom={1}
                         borderColor="primary.main"
                     >
-                        <Typography variant="subtitle1">App Settings</Typography>
+                        <Typography variant="subtitle1">Cài đặt ứng dụng</Typography>
                         <IconButton color="inherit" size="large" onClick={closeDrawer}>
                             <CloseIcon />
                         </IconButton>
@@ -103,42 +103,42 @@ function DrawerContent() {
         <>
             <div>
                 <Typography variant="subtitle2" gutterBottom>
-                    Color Scheme
+                    Màu nền
                 </Typography>
                 <Typography variant="caption" gutterBottom>
-                    Some charts need page refresh
+                    Các biểu đồ cần phải tải lại trang
                 </Typography>
                 <Stack direction="row" spacing={2}>
                     <OptionButton selected={themeConfig.mode === 'light'} onClick={() => handlerClick('mode', 'light')}>
-                        Light
+                        Sáng
                     </OptionButton>
                     <OptionButton selected={themeConfig.mode === 'dark'} onClick={() => handlerClick('mode', 'dark')}>
-                        Dark
+                        Tối
                     </OptionButton>
                 </Stack>
             </div>
             <div>
                 <Typography variant="subtitle2" gutterBottom>
-                    Sticky Navbar:
+                    Thanh điều hướng:
                 </Typography>
                 <Stack direction="row" spacing={2}>
                     <OptionButton
                         selected={themeConfig.stickyHeader === true}
                         onClick={() => handlerClick('stickyHeader', true)}
                     >
-                        Yes
+                        Giữ
                     </OptionButton>
                     <OptionButton
                         selected={themeConfig.stickyHeader === false}
                         onClick={() => handlerClick('stickyHeader', false)}
                     >
-                        No
+                        Không giữ
                     </OptionButton>
                 </Stack>
             </div>
             <div>
                 <Typography variant="subtitle2" gutterBottom>
-                    Page transitions:
+                    Chuyển trang:
                 </Typography>
                 <Typography variant="caption" gutterBottom>
                     Not work well with code splitting, lazy & suspense
@@ -160,14 +160,14 @@ function DrawerContent() {
             </div>
             <div>
                 <Typography variant="subtitle2" gutterBottom>
-                    Font Family
+                    Phông chữ
                 </Typography>
                 <Stack direction="row" spacing={2} flexWrap="wrap">
                     <OptionButton
-                        selected={themeConfig.fontFamily === 'Rubik'}
-                        onClick={() => handlerClick('fontFamily', 'Rubik')}
+                        selected={themeConfig.fontFamily === 'Noto Sans'}
+                        onClick={() => handlerClick('fontFamily', 'Noto Sans')}
                     >
-                        Rubik
+                        Noto Sans
                     </OptionButton>
                     <OptionButton
                         selected={themeConfig.fontFamily === 'Roboto'}
@@ -179,7 +179,7 @@ function DrawerContent() {
             </div>
             <div>
                 <Typography variant="subtitle2" gutterBottom>
-                    Border Radius
+                    Độ cong viền
                 </Typography>
                 <Slider
                     aria-label="Always visible"
@@ -192,7 +192,7 @@ function DrawerContent() {
             </div>
             <div>
                 <Typography>
-                    Reset{' '}
+                    Cài lại{' '}
                     <IconButton color="inherit" size="large" onClick={handlerConfigReset}>
                         <RestartAltIcon />
                     </IconButton>

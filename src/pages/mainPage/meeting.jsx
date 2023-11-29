@@ -27,8 +27,10 @@ export default function Schedule({ title }) {
                 }, 600);
             })
             .catch((reason) => {
-                alert(reason.response.data.message, 'error');
-                console.log(reason);
+                if (reason.response.status !== 401) {
+                    alert(reason.response.data.message, 'error');
+                    console.log(reason);
+                }
             });
     };
 
@@ -42,8 +44,10 @@ export default function Schedule({ title }) {
                 }, 600);
             })
             .catch((reason) => {
-                alert(reason.response.data.message, 'error');
-                console.log(reason);
+                if (reason.response.status !== 401) {
+                    alert(reason.response.data.message, 'error');
+                    console.log(reason);
+                }
             });
     };
 
@@ -70,7 +74,6 @@ export default function Schedule({ title }) {
             headerAlign: 'center',
             align: 'center',
             width: 130,
-            valueFormatter: (params) => (params.value ? moment(params?.value).format('DD/MM/YYYY') : 'N/A'),
         },
         {
             field: 'dayOfWeek',

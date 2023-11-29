@@ -55,8 +55,10 @@ function ProfilePage() {
                 navigate('/');
             })
             .catch((reason) => {
-                alert(reason.response.data.message, 'error');
-                console.log(reason);
+                if (reason.response.status !== 401) {
+                    alert(reason.response.data.message, 'error');
+                    console.log(reason);
+                }
             });
     };
 

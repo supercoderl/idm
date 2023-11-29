@@ -53,8 +53,10 @@ export default function Department({ title }) {
                 }, 600);
             })
             .catch((reason) => {
-                alert(reason.response.data.message, 'error');
-                console.log(reason);
+                if (reason.response.status !== 401) {
+                    alert(reason.response.data.message, 'error');
+                    console.log(reason);
+                }
             });
     };
 
@@ -90,9 +92,11 @@ export default function Department({ title }) {
                 }, 600);
             })
             .catch((reason) => {
-                alert(reason.response.data.message, 'error');
-                setLoading(false);
-                console.log(reason);
+                if (reason.response.status !== 401) {
+                    alert(reason.response.data.message, 'error');
+                    setLoading(false);
+                    console.log(reason);
+                }
             });
     };
 
@@ -108,8 +112,10 @@ export default function Department({ title }) {
                 });
             })
             .catch((reason) => {
-                console.log(reason.response.data.message);
-                setLoading(false);
+                if (reason.response.status !== 401) {
+                    console.log(reason.response.data.message);
+                    setLoading(false);
+                }
             });
         cancleDelete();
     };

@@ -49,7 +49,7 @@ export default function Assignment() {
                 setUsers(value.data.data);
             })
             .catch((reason) => {
-                console.log(reason);
+                if (reason.response.status !== 401) console.log(reason);
             });
     };
 
@@ -60,7 +60,7 @@ export default function Assignment() {
                 setTasks(value.data.data);
             })
             .catch((reason) => {
-                console.log(reason);
+                if (reason.response.status !== 401) console.log(reason);
             });
     };
 
@@ -77,8 +77,10 @@ export default function Assignment() {
                 }, 600);
             })
             .catch((reason) => {
-                console.log(reason.response.data.message);
-                setLoading(false);
+                if (reason.response.status !== 401) {
+                    console.log(reason.response.data.message);
+                    setLoading(false);
+                }
             });
     };
 

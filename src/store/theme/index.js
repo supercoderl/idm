@@ -6,7 +6,7 @@ const initialState = {
         mode: 'light',
         stickyHeader: true,
         pageTransitions: false,
-        fontFamily: 'Rubik',
+        fontFamily: 'Noto Sans',
         borderRadius: 2,
     },
 };

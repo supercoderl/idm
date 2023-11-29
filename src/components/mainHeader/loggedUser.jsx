@@ -59,7 +59,7 @@ function LoggedUser() {
                 }, 600);
             })
             .catch((reason) => {
-                console.log(reason);
+                if (reason.response.status !== 401) console.log(reason);
             });
     };
 
@@ -75,7 +75,7 @@ function LoggedUser() {
                     navigate('/');
                 })
                 .catch((reason) => {
-                    alert(reason.response.data.message);
+                    if (reason.response.status !== 401) alert(reason.response.data.message);
                 });
         }
     };

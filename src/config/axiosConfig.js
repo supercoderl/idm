@@ -3,8 +3,8 @@ import axios from 'axios';
 const getToken = () => localStorage.getItem('token');
 
 const axiosInstance = axios.create({
-    baseURL: 'http://localhost:5290/api/',
-    // baseURL: 'https://localhost:8811/api/',
+    // baseURL: 'http://localhost:5290/api/',
+    baseURL: 'https://localhost:8811/api/',
     headers: {
         'Content-Type': 'application/json',
     },
@@ -30,34 +30,27 @@ axiosInstance.interceptors.response.use(
     },
     async (error) => {
         const originalRequest = error.config;
-        const refresh = localStorage.getItem('refreshToken');
 
         if (error.response) {
-            switch (error.response.status) {
-                case 401:
-                    if (refresh) {
-                        try {
-                            const body = {
-                                refreshToken: refresh,
-                            };
+            if (error.response.status === 401 && !originalRequest._retry) {
+                originalRequest._retry = true;
 
-                            const response = await axiosInstance.post('Auth/refresh-token', body);
+                try {
+                    const body = {
+                        refreshToken: localStorage.getItem('refreshToken'),
+                    };
 
-                            localStorage.setItem('token', response.data.data.token.accessToken);
-                            localStorage.setItem('refreshToken', response.data.data.refreshToken.refreshToken);
-                            return axios(originalRequest);
-                        } catch (refreshError) {
-                            console.error('Lỗi khi làm mới token: ', refreshError);
-                        }
-                    }
-                    break;
-                case 403:
-                    window.location.replace('/error-403');
-                    break;
-                default:
-                    console.log(error);
-                    break;
-            }
+                    const response = await axiosInstance.post('Auth/refresh-token', body);
+
+                    localStorage.setItem('token', response.data.data.token.accessToken);
+                    localStorage.setItem('refreshToken', response.data.data.refreshToken.refreshToken);
+
+                    originalRequest.headers.Authorization = `Bearer ${response.data.data.token.accessToken}`;
+                    return axios(originalRequest);
+                } catch (refreshError) {
+                    console.error('Lỗi khi làm mới token: ', refreshError);
+                }
+            } else if (error.response.status === 403) window.location.replace('/error-403');
         }
         // window.location.replace('/');
         return Promise.reject(error);

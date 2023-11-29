@@ -53,7 +53,7 @@ library.add(faShieldHalved);
 library.add(faMedal);
 
 function SampleTabsPage() {
-    const [activeIndex, setActiveIndex] = useState(1);
+    const [activeIndex, setActiveIndex] = useState(0);
     const [menus, setMenus] = useState([]);
     const [loading, setLoading] = useState(false);
 
@@ -69,13 +69,21 @@ function SampleTabsPage() {
                 }, 600);
             })
             .catch((reason) => {
-                setLoading(false);
-                console.log(reason);
+                if (reason.response.status !== 401) {
+                    setLoading(false);
+                    console.log(reason);
+                }
             });
+    };
+
+    const setPageIndex = (index) => {
+        setActiveIndex(index);
+        localStorage.setItem('pageIndex', index);
     };
 
     useEffect(() => {
         getMenus();
+        setActiveIndex(localStorage.getItem('pageIndex') ? Number(localStorage.getItem('pageIndex')) : 0);
     }, []);
     return (
         <>
@@ -108,7 +116,7 @@ function SampleTabsPage() {
                                           key={index}
                                           icon={item.menuIcon}
                                           text={item.menuName}
-                                          onClick={() => setActiveIndex(index)}
+                                          onClick={() => setPageIndex(index)}
                                           selected={activeIndex === index}
                                       />
                                   ))
