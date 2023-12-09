@@ -81,6 +81,11 @@ function SampleTabsPage() {
         localStorage.setItem('pageIndex', index);
     };
 
+    const getMenuID = (value) => {
+        const menu = menus.find((x) => x.code === value);
+        return menu ? menu.menuID : 0;
+    };
+
     useEffect(() => {
         getMenus();
         setActiveIndex(localStorage.getItem('pageIndex') ? Number(localStorage.getItem('pageIndex')) : 0);
@@ -116,8 +121,8 @@ function SampleTabsPage() {
                                           key={index}
                                           icon={item.menuIcon}
                                           text={item.menuName}
-                                          onClick={() => setPageIndex(index)}
-                                          selected={activeIndex === index}
+                                          onClick={() => setPageIndex(item.menuID)}
+                                          selected={activeIndex === item.menuID}
                                       />
                                   ))
                                 : null}
@@ -129,14 +134,14 @@ function SampleTabsPage() {
                     </Card>
                 </Grid>
                 <Grid item xs={12} sm={8} md={9}>
-                    {activeIndex === 0 && <Account title="Quản lý tài khoản" />}
-                    {activeIndex === 1 && <Schedule title="Lịch họp, trực khoa" />}
-                    {activeIndex === 2 && <Assignment title="Phân công công việc" />}
-                    {activeIndex === 3 && <Proposal title="Đề xuất" />}
-                    {activeIndex === 4 && <File title="Quản lý hồ sơ lưu trữ" />}
-                    {activeIndex === 5 && <Department title="Quản lý phòng ban" />}
-                    {activeIndex === 6 && <Statistic title="Báo cáo thống kê" />}
-                    {activeIndex === 7 && <Role title="Phân quyền" />}
+                    {activeIndex === getMenuID('Account') && <Account title="Quản lý tài khoản" />}
+                    {activeIndex === getMenuID('Schedule') && <Schedule title="Lịch họp, trực khoa" />}
+                    {activeIndex === getMenuID('Assignment') && <Assignment title="Phân công công việc" />}
+                    {activeIndex === getMenuID('Proposal') && <Proposal title="Đề xuất" />}
+                    {activeIndex === getMenuID('File') && <File title="Quản lý hồ sơ lưu trữ" />}
+                    {activeIndex === getMenuID('Department') && <Department title="Quản lý phòng ban" />}
+                    {activeIndex === getMenuID('Report') && <Statistic title="Báo cáo thống kê" />}
+                    {activeIndex === getMenuID('Authorize') && <Role title="Phân quyền" />}
                 </Grid>
             </Grid>
         </>

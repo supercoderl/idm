@@ -67,6 +67,21 @@ export default function File({ title }) {
             width: 130,
         },
         {
+            field: 'preview',
+            headerName: 'Xem trước',
+            width: 130,
+            renderCell: (params) => (
+                <a
+                    href={`http://localhost:5290/${params.row.filePath}`}
+                    rel="noreferrer"
+                    target="_blank"
+                    download={params.row.fileName}
+                >
+                    Nhấn để xem
+                </a>
+            ),
+        },
+        {
             field: 'filePath',
             headerName: 'Đường dẫn thư mục',
             width: 130,

@@ -12,6 +12,7 @@ import {
     FormControl,
     InputLabel,
     Select,
+    TextField,
 } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
@@ -21,7 +22,7 @@ import { enqueueSnackbar } from 'notistack';
 import { DatePicker, TimePicker } from '@mui/x-date-pickers';
 import moment from 'moment';
 
-export default function Assignment() {
+export default function Schedule() {
     const [schedule, setSchedule] = useState({
         title: '',
         description: '',
@@ -33,6 +34,7 @@ export default function Assignment() {
         dayOfWeek: '',
         weekOfMonth: 0,
     });
+    const [users, setUsers] = useState([]);
 
     const [loading, setLoading] = useState(false);
 
@@ -44,12 +46,29 @@ export default function Assignment() {
         enqueueSnackbar(message, status);
     };
 
+    const getUsers = async () => {
+        await axiosInstance
+            .get('User/users')
+            .then((value) => {
+                setUsers(value.data.data);
+            })
+            .catch((reason) => {
+                if (reason.response.status !== 401) {
+                    alert(reason.response.data.message, 'error');
+                    console.log(reason);
+                }
+            });
+    };
+
     const submit = async (event) => {
         event.preventDefault();
         setLoading(true);
+        schedule.duration = parseFloat(schedule.duration);
+        schedule.weekOfMonth = Number(schedule.weekOfMonth);
+        console.log(schedule);
 
         await axiosInstance
-            .post('Assignment/create-assignment', assignment)
+            .post('Schedule/create-schedule', schedule)
             .then((value) => {
                 setTimeout(() => {
                     alert(value.data.message);
@@ -58,7 +77,7 @@ export default function Assignment() {
             })
             .catch((reason) => {
                 if (reason.response.status !== 401) {
-                    console.log(reason.response.data.message);
+                    console.log(reason);
                     setLoading(false);
                 }
             });
@@ -71,6 +90,10 @@ export default function Assignment() {
             width: 200,
         },
     ];
+
+    useEffect(() => {
+        getUsers();
+    }, []);
 
     return (
         <>
@@ -99,16 +122,7 @@ export default function Assignment() {
                     </Box>
 
                     <Grid container spacing={4}>
-                        <Grid item xs={12} sm={4} md={4}>
-                            <DataGrid
-                                getRowId={(row) => row.taskID}
-                                rows={tasks}
-                                columns={columns}
-                                hideFooterPagination
-                                hideFooter
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={8} md={8}>
+                        <Grid item xs={12} sm={8} md={12}>
                             <Box
                                 component="form"
                                 onSubmit={submit}
@@ -128,7 +142,7 @@ export default function Assignment() {
                                     spacing={{ xs: 2, md: 3 }}
                                     columns={{ xs: 4, sm: 8, md: 12 }}
                                 >
-                                    <Grid item xs={2} sm={4} md={12}>
+                                    <Grid item xs={2} sm={4} md={4}>
                                         <TextField
                                             label="Tiêu đề"
                                             required
@@ -146,7 +160,7 @@ export default function Assignment() {
                                             fullWidth
                                         />
                                     </Grid>
-                                    <Grid item xs={2} sm={4} md={12}>
+                                    <Grid item xs={2} sm={4} md={4}>
                                         <TextField
                                             label="Nội dung"
                                             required
@@ -156,7 +170,7 @@ export default function Assignment() {
                                             size="small"
                                             value={schedule.description}
                                             onChange={(e) =>
-                                                setDepartment((item) => ({
+                                                setSchedule((item) => ({
                                                     ...item,
                                                     ...{ description: e.target.value },
                                                 }))
@@ -164,7 +178,7 @@ export default function Assignment() {
                                             fullWidth
                                         />
                                     </Grid>
-                                    <Grid item xs={2} sm={4} md={6}>
+                                    <Grid item xs={2} sm={4} md={4}>
                                         <FormControl size="small" fullWidth>
                                             <InputLabel id="organizer">Chủ trì</InputLabel>
                                             <Select
@@ -189,7 +203,7 @@ export default function Assignment() {
                                             </Select>
                                         </FormControl>
                                     </Grid>
-                                    <Grid item xs={2} sm={4} md={6}>
+                                    <Grid item xs={2} sm={4} md={4}>
                                         <TimePicker
                                             label="Bắt đầu"
                                             required
@@ -207,7 +221,7 @@ export default function Assignment() {
                                             fullWidth
                                         />
                                     </Grid>
-                                    <Grid item xs={2} sm={4} md={12}>
+                                    <Grid item xs={2} sm={4} md={4}>
                                         <TextField
                                             label="Khoảng thời gian"
                                             required
@@ -225,9 +239,9 @@ export default function Assignment() {
                                             fullWidth
                                         />
                                     </Grid>
-                                    <Grid item xs={2} sm={4} md={6}>
+                                    <Grid item xs={2} sm={4} md={4}>
                                         <FormControl size="small" fullWidth>
-                                            <InputLabel id="task">Trạng thái</InputLabel>
+                                            <InputLabel id="repeat">Trạng thái</InputLabel>
                                             <Select
                                                 labelId="repeat"
                                                 id="repeat"
@@ -240,18 +254,14 @@ export default function Assignment() {
                                                     }))
                                                 }
                                             >
-                                                <MenuItem value={true}>
-                                                    Lặp lại
-                                                </MenuItem>
-                                                <MenuItem value={false}>
-                                                    Không lặp lại
-                                                </MenuItem>
+                                                <MenuItem value>Lặp lại</MenuItem>
+                                                <MenuItem value={false}>Không lặp lại</MenuItem>
                                             </Select>
                                         </FormControl>
                                     </Grid>
-                                    <Grid item xs={2} sm={4} md={6}>
+                                    <Grid item xs={2} sm={4} md={4}>
                                         <FormControl size="small" fullWidth>
-                                            <InputLabel id="task">Trong ngày</InputLabel>
+                                            <InputLabel id="onWorkingDay">Trong ngày</InputLabel>
                                             <Select
                                                 labelId="repeat"
                                                 id="repeat"
@@ -264,18 +274,14 @@ export default function Assignment() {
                                                     }))
                                                 }
                                             >
-                                                <MenuItem value={true}>
-                                                    Đúng
-                                                </MenuItem>
-                                                <MenuItem value={false}>
-                                                    Sai
-                                                </MenuItem>
+                                                <MenuItem value>Đúng</MenuItem>
+                                                <MenuItem value={false}>Sai</MenuItem>
                                             </Select>
                                         </FormControl>
                                     </Grid>
-                                    <Grid item xs={2} sm={4} md={6}>
+                                    <Grid item xs={2} sm={4} md={4}>
                                         <FormControl size="small" fullWidth>
-                                            <InputLabel id="task">Thứ</InputLabel>
+                                            <InputLabel id="dayOfWeek">Thứ</InputLabel>
                                             <Select
                                                 labelId="repeat"
                                                 id="repeat"
@@ -288,31 +294,17 @@ export default function Assignment() {
                                                     }))
                                                 }
                                             >
-                                                <MenuItem value="Monday">
-                                                    Hai
-                                                </MenuItem>
-                                                <MenuItem value="Tuesday">
-                                                    Ba
-                                                </MenuItem>
-                                                <MenuItem value="Wednesday">
-                                                    Tư
-                                                </MenuItem>
-                                                <MenuItem value="Thursday">
-                                                    Năm
-                                                </MenuItem>
-                                                <MenuItem value="Friday">
-                                                    Sáu
-                                                </MenuItem>
-                                                <MenuItem value="Saturday">
-                                                    Bảy
-                                                </MenuItem>
-                                                <MenuItem value="Sunday">
-                                                    Chủ nhật
-                                                </MenuItem>
+                                                <MenuItem value="Monday">Hai</MenuItem>
+                                                <MenuItem value="Tuesday">Ba</MenuItem>
+                                                <MenuItem value="Wednesday">Tư</MenuItem>
+                                                <MenuItem value="Thursday">Năm</MenuItem>
+                                                <MenuItem value="Friday">Sáu</MenuItem>
+                                                <MenuItem value="Saturday">Bảy</MenuItem>
+                                                <MenuItem value="Sunday">Chủ nhật</MenuItem>
                                             </Select>
                                         </FormControl>
                                     </Grid>
-                                    <Grid item xs={2} sm={4} md={12}>
+                                    <Grid item xs={2} sm={4} md={4}>
                                         <TextField
                                             label="Tuần"
                                             required

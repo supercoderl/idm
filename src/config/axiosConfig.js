@@ -3,8 +3,8 @@ import axios from 'axios';
 const getToken = () => localStorage.getItem('token');
 
 const axiosInstance = axios.create({
-    // baseURL: 'http://localhost:5290/api/',
-    baseURL: 'https://localhost:8811/api/',
+    baseURL: 'http://localhost:5290/api/',
+    // baseURL: 'https://localhost:8811/api/',
     headers: {
         'Content-Type': 'application/json',
     },

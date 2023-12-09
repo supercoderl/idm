@@ -14,6 +14,8 @@ import {
     IconButton,
     Tooltip,
     Typography,
+    SwipeableDrawer,
+    Divider,
 } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import Modal from '@/components/modal';
@@ -23,6 +25,7 @@ import AddIcon from '@mui/icons-material/Add';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
 import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import { DataGrid, viVN } from '@mui/x-data-grid';
 import moment from 'moment';
 import { enqueueSnackbar } from 'notistack';
@@ -46,7 +49,9 @@ export default function Assignment({ title }) {
     const [progresses, setProgresses] = useState([]);
     const [loading, setLoading] = useState(false);
     const [isDeleting, setStateDeleting] = useState(false);
+    const [isDraw, setStateDrawer] = useState(false);
     const arrayProgressClick = 5;
+    const user = JSON.parse(window.localStorage.getItem('user'));
 
     const alert = (message, status) => {
         enqueueSnackbar(message, status);
@@ -72,20 +77,37 @@ export default function Assignment({ title }) {
     };
 
     const getAssignments = async () => {
-        await axiosInstance
-            .get('Assignment/get-assignments')
-            .then((value) => {
-                setTimeout(() => {
-                    setAssignments(value.data.data);
-                    // alert(value.data.message, 'success');
-                }, 600);
-            })
-            .catch((reason) => {
-                if (reason.response.status !== 401) {
-                    alert(reason.response.data.message, 'error');
-                    console.log(reason);
-                }
-            });
+        if (user && user.roles.find((x) => x === 'Giảng viên')) {
+            await axiosInstance
+                .get('Assignment/get-assignments-for-lecture')
+                .then((value) => {
+                    setTimeout(() => {
+                        setAssignments(value.data.data);
+                        // alert(value.data.message, 'success');
+                    }, 600);
+                })
+                .catch((reason) => {
+                    if (reason.response.status !== 401) {
+                        alert(reason.response.data.message, 'error');
+                        console.log(reason);
+                    }
+                });
+        } else {
+            await axiosInstance
+                .get('Assignment/get-assignments')
+                .then((value) => {
+                    setTimeout(() => {
+                        setAssignments(value.data.data);
+                        // alert(value.data.message, 'success');
+                    }, 600);
+                })
+                .catch((reason) => {
+                    if (reason.response.status !== 401) {
+                        alert(reason.response.data.message, 'error');
+                        console.log(reason);
+                    }
+                });
+        }
     };
 
     const getUsers = async () => {
@@ -138,6 +160,15 @@ export default function Assignment({ title }) {
 
     const cancleDelete = () => {
         setStateDeleting(false);
+    };
+
+    const toggleDrawer = (item, open) => (event) => {
+        if (event && event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+            return;
+        }
+
+        setAssignment(item);
+        setStateDrawer(open);
     };
 
     const updateAssignment = async (event) => {
@@ -280,6 +311,9 @@ export default function Assignment({ title }) {
             width: 90,
             renderCell: (params) => (
                 <>
+                    <Button style={{ minWidth: 32 }} onClick={toggleDrawer(params.row, true)}>
+                        <RemoveRedEyeIcon fontSize="small" />
+                    </Button>
                     <Button style={{ minWidth: 32 }} onClick={() => openModal(params.row)}>
                         <ModeEditIcon fontSize="small" />
                     </Button>
@@ -511,6 +545,129 @@ export default function Assignment({ title }) {
                 content={`Bạn có chắc muốn xóa bảng phân công ${getTaskTitle(assignment.taskID)} ?`}
                 submit={deleteAssignment}
             />
+
+            <SwipeableDrawer anchor="right" open={isDraw} onClose={toggleDrawer(false)} onOpen={() => {}}>
+                <Box width={400} py={3} px={2}>
+                    <Typography variant="h2" pb={3} textAlign="center">
+                        Phân công công việc
+                    </Typography>
+                    <Typography variant="h5">ID: #{assignment.assignmentID}</Typography>
+                    <p>Nhân viên được phân công:</p>
+                    <p style={{ fontSize: 14, padding: 5, border: '2px solid rgb(173 136 230)', width: 'fit-content' }}>
+                        {getName(assignment.employee)}
+                    </p>
+                    <Divider />
+                    <p>Công việc được phân công: </p>
+                    <p style={{ fontSize: 14, padding: 5, border: '2px solid rgb(173 136 230)', width: 'fit-content' }}>
+                        {getTaskTitle(assignment.taskID)}
+                    </p>
+                    <p>Thời gian bắt đầu: </p>
+                    <p style={{ fontSize: 14, width: 'fit-content' }}>--- {assignment.startTime} ---</p>
+                    <p>Thời gian kết thúc: </p>
+                    <p style={{ fontSize: 14, width: 'fit-content' }}>--- {assignment.endTime} ---</p>
+                    <p>Ngày hết hạn: </p>
+                    <p style={{ fontSize: 14, width: 'fit-content' }}>
+                        --- {assignment.deadline ? moment(assignment.deadline).format('DD/MM/YYYY') : 'N/A'} ---
+                    </p>
+                    <Box display="flex" justifyContent="space-between">
+                        <p>Trạng thái: </p>
+                        <p>Tiến độ: </p>
+                    </Box>
+                    <Box display="flex" justifyContent="space-between">
+                        <p style={{ fontSize: 14, width: 'fit-content', marginTop: 0 }}>
+                            <Chip
+                                variant="outline"
+                                sx={{ borderRadius: 1 }}
+                                color={assignment.status === 1 ? 'success' : 'secondary'}
+                                label={assignment.status === 1 ? 'Đang hoạt động' : 'Đã hết hạn'}
+                            />
+                        </p>
+                        <Chip
+                            variant="filled"
+                            color="warning"
+                            sx={{ borderRadius: 1 }}
+                            label={`${getProgressStatus(assignment.assignmentID)}%`}
+                        />
+                    </Box>
+                    <Divider />
+                    <Box display="flex" justifyContent="space-between">
+                        <p
+                            style={{
+                                fontSize: 14,
+                                marginBottom: 0,
+                            }}
+                        >
+                            Người tạo:{' '}
+                        </p>
+                        <p
+                            style={{
+                                fontSize: 14,
+                                marginBottom: 0,
+                            }}
+                        >
+                            Ngày tạo:{' '}
+                        </p>
+                    </Box>
+                    <Box display="flex" justifyContent="space-between">
+                        <p
+                            style={{
+                                fontSize: 14,
+                            }}
+                        >
+                            {getName(assignment.createdBy)}
+                        </p>
+                        <p
+                            style={{
+                                fontSize: 14,
+                            }}
+                        >
+                            ---{' '}
+                            {assignment.createdDateTime
+                                ? moment(assignment.createdDateTime).format('DD/MM/YYYY')
+                                : 'N/A'}{' '}
+                            ---
+                        </p>
+                    </Box>
+                    <Box display="flex" justifyContent="space-between">
+                        <p
+                            style={{
+                                fontSize: 14,
+                                marginBottom: 0,
+                            }}
+                        >
+                            Người cập nhật:{' '}
+                        </p>
+                        <p
+                            style={{
+                                fontSize: 14,
+                                marginBottom: 0,
+                            }}
+                        >
+                            Ngày cập nhật:{' '}
+                        </p>
+                    </Box>
+                    <Box display="flex" justifyContent="space-between">
+                        <p
+                            style={{
+                                fontSize: 14,
+                            }}
+                        >
+                            {getName(assignment.updatedBy)}
+                        </p>
+                        <p
+                            style={{
+                                fontSize: 14,
+                            }}
+                        >
+                            ---{' '}
+                            {assignment.updatedDateTime
+                                ? moment(assignment.updatedDateTime).format('DD/MM/YYYY')
+                                : 'N/A'}{' '}
+                            ---
+                        </p>
+                    </Box>
+                </Box>
+            </SwipeableDrawer>
         </>
     );
 }

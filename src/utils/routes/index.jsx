@@ -15,6 +15,7 @@ const UploadNewFile = withLazyLoadably(lazy(() => import('@/pages/filePage/uploa
 const CreateAssignment = withLazyLoadably(lazy(() => import('@/pages/assignmentPage/createAssignment')));
 const CreateProposal = withLazyLoadably(lazy(() => import('@/pages/proposalPage/createProposal')));
 const CreateDepartment = withLazyLoadably(lazy(() => import('@/pages/departmentPage/createDepartment')));
+const CreateSchedule = withLazyLoadably(lazy(() => import('@/pages/schedulePage/createSchedule')));
 const Page403 = withLazyLoadably(lazy(() => import('@/pages/error/403')));
 
 function Router() {
@@ -33,6 +34,7 @@ function Router() {
                         <Route path="create-assignment" element={<CreateAssignment />} />
                         <Route path="create-proposal" element={<CreateProposal />} />
                         <Route path="create-department" element={<CreateDepartment />} />
+                        <Route path="create-schedule" element={<CreateSchedule />} />
                     </Route>
                     <Route path="/error-403" element={<Page403 />} />
                 </Routes>

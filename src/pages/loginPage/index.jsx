@@ -37,6 +37,7 @@ function Login() {
                 setTimeout(() => {
                     window.localStorage.setItem('token', value.data.data.token.accessToken);
                     window.localStorage.setItem('refreshToken', value.data.data.refreshToken.refreshToken);
+                    window.localStorage.setItem('user', JSON.stringify(value.data.data.userResult));
                     navigate('home');
                     alert(value.data.message, 'success');
                     setLoading(false);
